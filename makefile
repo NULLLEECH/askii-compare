@@ -1,7 +1,23 @@
-# hardcoded non-dynamic
+# my personal makefile modified
 
-all:
-	cc main.c -o main.o -c -Ofast --std=c99
-	cc main.o -o av -Ofast -D NDEBUG --std=c99
+WARN = -Wall -Wextra -Wshadow
+
+CFLAGS   = $(WARN) -Og -std=c99 -g
+RFLAGS   = $(WARN) -O3 -std=c99 -D NDEBUG -D BUF_SIZE=100000
+
+SRCR = *.c
+SRCS = $(wildcard $(SRCR))
+OBJS = $(SRCS:.c=.o)
+
+TARGET = av
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(OBJS) -o $@ $(CFLAGS)
+
+release:
+	$(CC) $(OBJS) -o $(TARGET) $(RFLAGS)
+
 clean:
-	rm -f *.o av
+	@rm -vf $(OBJS) $(TARGET)
